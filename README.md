@@ -24,19 +24,27 @@ This repository contains the code for the IntelliClimate case study, showcasing 
       ```
    # (OR)
 
-1. Update package information and install required packages:
+2. Install xOpera inside python virtual environment.
 
    ```bash
+   #Update package information and install required packages:
    sudo apt update
    sudo apt install -y python3-venv python3-wheel python-wheel-common
-   ```
-2. Create a directory for xOpera and set up a virtual environment:
-   ```bash
+   
+   #Create a directory for xOpera and set up a virtual environment:
    mkdir ~/opera && cd ~/opera
    python3 -m venv .venv && . .venv/bin/activate
    pip install --upgrade pip
    pip install opera
    ```
+3. By default, xOpera works with user-name : centos. Make sure that opera's username alligns with the fog infrastructure user, you wish to work on (In this case study, it's root user).
+   ```bash
+   #set the opera to work with root user.
+   export OPERA_SSH_USER=root
+   #check the opera user.
+   echo $OPERA_SSH_USER
+   ```
+NOTE: You can also add this to the bashrc file directly for persistence across the sessions.
 ## Setup Passwordless SSH
 1. Generate SSH key:
    ```bash
