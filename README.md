@@ -1,4 +1,4 @@
-# FogDEFTKube: An Extended FogDEFT Framework Supporting Kubernetes and Continuous Integration
+# FogDEFTKube: An Extended FogDEFT Framework Supporting Kubernetes
 
 ## Project Overview
 
