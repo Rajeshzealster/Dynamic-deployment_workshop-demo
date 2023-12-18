@@ -1,0 +1,6 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Un-install k3s server agent
+      shell: /usr/local/bin/k3s-uninstall.sh

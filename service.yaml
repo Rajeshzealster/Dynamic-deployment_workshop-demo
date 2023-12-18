@@ -1,0 +1,180 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+description: Service Template for Intelligent Temperature & Humidity Management System using k3s orchestration
+
+metadata:
+  template_name: "fog service orchestration for IT & HMS"
+  template_author: "Rajesh_Thalla"
+  template_version: "1.0"
+
+imports:
+  - nodetypes/k3s_control_plane/k3s_control_plane.yaml
+  - relationshiptypes/token_tranfer/token_transfer.yaml
+  - nodetypes/k3s_worker/k3s_worker.yaml
+  - nodetypes/k3s_deployment/k3s_deployment.yaml
+  - nodetypes/daemon-service/daemon-service.yaml
+
+topology_template:
+  inputs:
+    node_1:
+      type: string
+      description: Input IP address of node_1
+    node_2:
+      type: string
+      description: Input IP address of node_2
+
+    node_3:
+      type: string
+      description: Input IP address of node_3
+
+    node_4:
+      type: string
+      description: Input IP address of node_4
+
+  outputs:
+    fog_node_1_ip:
+      description: IP address of fog-node-1 - K3s master-node
+      value: { get_attribute: [fog-node-1, private_address] }
+      # or use public_address if that is the required IP
+
+
+  node_templates:
+    # All fog nodes
+    fog-node-1:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: node_1 }
+        public_address: { get_input: node_1 }
+
+    fog-node-2:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: node_2 }
+        public_address: { get_input: node_2 }
+
+    fog-node-3:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: node_3 }
+        public_address: { get_input: node_3 }
+  
+    fog-node-4:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: node_4 }
+        public_address: { get_input: node_4 }
+
+
+
+    #k3s-control-plane
+    k3s-control-plane:
+      type: fog.k3s.ControlPlane
+      requirements: 
+        - host: fog-node-1
+
+    #k3s worker node -1
+    k3s-worker-1:
+      type: fog.k3s.Worker
+      requirements:
+        - host: fog-node-2
+        - leader: k3s-control-plane
+    
+    # k3s worker node - 2
+    k3s-worker-2:
+      type: fog.k3s.Worker
+      requirements:
+        - host: fog-node-3
+        - leader: k3s-control-plane
+
+    #k3s deployment of MQTT-broker server
+    k3s-deployment-1:
+      type: fog.k3s.Deployment
+      properties:
+        depl_name: mqtt-broker-deployment
+        svc_name: mqtt-broker-service
+        depl_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/mqtt_broker/mqtt_broker_deployment.yaml
+        k3s_name_space: default
+      requirements:
+        - host: fog-node-1
+        - dependency: k3s-worker-1
+        - dependency: k3s-worker-2
+
+    # # #k3s deployment -- mqtt-subscriber
+    k3s-deployment-2:
+      type: fog.k3s.Deployment
+      properties:
+        depl_name: mqtt-subscriber-deployment
+        svc_name: mqtt-subscriber-service
+        depl_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/mqtt_subscriber/mqtt_subscriber_deployment.yaml
+        k3s_name_space: default
+      requirements:
+        - host: fog-node-1
+        - dependency: k3s-worker-1
+        - dependency: k3s-worker-2
+        - dependency: k3s-deployment-1
+
+    #Background service to publish sensor data on to broker server
+    publisher-node:
+      type: fog.daemon.Service
+      properties:
+        name: mqtt-publisher
+        script_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/DHT11-publisher/publisher.py
+        service_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/DHT11-publisher/mqtt-publisher.service
+        Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
+
+        packages:
+          - paho-mqtt
+          - RPi.GPIO
+          - dht11
+      requirements:
+        - host: fog-node-4
+        - dependency: k3s-deployment-1
+
+    #Actuation service on fog-node-1
+    # actuator-service-1:
+    #   type: fog.daemon.Service
+    #   properties:
+    #     name: actuator
+    #     script_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation.py
+    #     service_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation_window_ac.service
+    #     Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
+    #     packages:
+    #       - paho-mqtt
+        
+    #   requirements:
+    #     - host: fog-node-1
+    #     - dependency: k3s-deployment-1
+
+    #Actuation service on fog-node-2
+    # daemon-service-2:
+    #   type: fog.daemon.Service
+    #   properties:
+    #     name: actuator
+    #     script_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation.py
+    #     service_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation_window_ac.service
+    #     Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
+    #     packages:
+    #       - paho-mqtt
+        
+    #   requirements:
+    #     - host: fog-node-2
+    #     - dependency: k3s-deployment-1
+    
+
+    #Actuation service on fog-node-3
+    actuator-service-3:
+      type: fog.daemon.Service
+      properties:
+        name: actuator
+        script_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation.py
+        service_url: https://raw.githubusercontent.com/Rajeshzealster/FogDEFTKube--Intelli-Climate-Case-study/main/mqtt/actuation-service/actuation_window_ac.service
+        Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
+        packages:
+          - paho-mqtt
+        
+      requirements:
+        - host: fog-node-3
+        - dependency: k3s-deployment-1
+
+   

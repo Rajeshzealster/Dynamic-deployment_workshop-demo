@@ -1,0 +1,6 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks: 
+    - name: Uninstalling k3s agent on workers
+      shell: "/usr/local/bin/k3s-agent-uninstall.sh"
