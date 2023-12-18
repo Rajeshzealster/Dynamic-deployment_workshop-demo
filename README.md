@@ -37,7 +37,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    pip install --upgrade pip
    pip install opera
    ```
-3. By default, xOpera works with user-name : centos. Make sure that opera's username alligns with the fog infrastructure user, you wish to work on (In this case study, it's root user).
+3. By default, xOpera works with user-name : **centos**. Make sure that opera's username alligns with the fog infrastructure user, you wish to work on (In this case study, it's **root** user).
    ```bash
    #set the opera to work with root user.
    export OPERA_SSH_USER=root
