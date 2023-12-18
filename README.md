@@ -68,7 +68,7 @@ Use the xOpera CLI commands to deploy services onto fog infrastructure:
    ```
 2. Deploy the services
    ```bash
-   opera deploy -i inputs.yaml service.yaml
+   opera deploy -i inputs.yaml -w 2 service.yaml
    ```
 2. Undeploy the services
    ```bash
