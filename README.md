@@ -17,7 +17,7 @@ FogDEFTKube is an extended framework built upon the OASIS - Topology and Orchest
 
 This repository contains the code for the IntelliClimate case study, showcasing dynamic deployment on fog infrastructure using xOpera orchestrator.
 
-## Setup xOpera
+## Setup xOpera on your workstation/PC
 1. Install xOpera from pip directly.
       ```bash
       pip install opera
@@ -45,7 +45,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    echo $OPERA_SSH_USER
    ```
 NOTE: You can also add this to the bashrc file directly for persistence across the sessions.
-## Setup Passwordless SSH
+## Setup Passwordless SSH from workstation/PC to all fog nodes(inputs.yaml)
 1. Generate SSH key:
    ```bash
    ssh-keygen
