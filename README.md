@@ -18,6 +18,11 @@ FogDEFTKube is an extended framework built upon the OASIS - Topology and Orchest
 This repository contains the code for the IntelliClimate case study, showcasing dynamic deployment on fog infrastructure using xOpera orchestrator.
 
 ## Setup xOpera
+1. Install xOpera from pip directly.
+      ```bash
+      pip install opera
+      ```
+   # (OR)
 
 1. Update package information and install required packages:
 
