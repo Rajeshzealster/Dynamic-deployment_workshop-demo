@@ -42,7 +42,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    ```bash
    ssh-keygen
    ```
-2. Copy SSH key to remote fog infrastructure (all nodes):
+2. Copy SSH key to remote fog infrastructure (all nodes specified in inputs.yaml file):
    ```bash
    ssh-copy-id root@fog-node-1_IP
    ssh-copy-id root@fog-node-2_IP
