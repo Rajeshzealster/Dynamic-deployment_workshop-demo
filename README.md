@@ -74,6 +74,7 @@ Use the xOpera CLI commands to deploy services onto fog infrastructure:
    ```bash
    opera undeploy
    ```
+**NOTE**: For more details on xOpera commands and options, visit  [xOpera-CLI](https://xlab-si.github.io/xopera-docs/02-cli.html#cli-commands-reference)
 ## Observations
 After deploying the IntelliClimate case study, observe the following:
 
