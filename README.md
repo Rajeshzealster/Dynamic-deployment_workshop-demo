@@ -57,7 +57,7 @@ NOTE: You can also add this to the bashrc file directly for persistence across t
    ```
 ## Clone the Repository
    ```bash
-   git clone https://github.com/Rajeshzealster/Dynamic-deployment_workshop-demo.git
+   git clone https://github.com/cloud-and-smart-labs/IntelliClimate_Case-Study_deployment.git
    cd Dynamic-deployment_workshop-demo
    ```
 ## Deploy Services
@@ -108,6 +108,8 @@ Subscribe to sensor/data topic:
    ```bash
    mosquitto_sub -h node1_IP -p 30001 -t sensor/data
    ```
+Here, node1_IP corresponds to the IP of kubernetes master node.
+
 Now, you can observe the sensor-generated values on the mqtt-server’s sensor/data topic.
 
 We had setup the thresholds of 30 and 70 for temperature and humidity respectively. So, whenever the values goes beyond the threshold, you can see the actuator (here the servomotor) performing some work (rotates on to left for opening).
