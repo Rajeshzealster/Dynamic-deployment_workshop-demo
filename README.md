@@ -58,7 +58,7 @@ NOTE: You can also add this to the bashrc file directly for persistence across t
 ## Clone the Repository
    ```bash
    git clone https://github.com/cloud-and-smart-labs/IntelliClimate_Case-Study_deployment.git
-   cd Dynamic-deployment_workshop-demo
+   cd IntelliClimate_Case-Study_deployment
    ```
 ## Deploy Services
 Use the xOpera CLI commands to deploy services onto fog infrastructure:
