@@ -35,7 +35,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    mkdir ~/opera && cd ~/opera
    python3 -m venv .venv && . .venv/bin/activate
    pip install --upgrade pip
-   pip install opera=0.6.8
+   pip install opera==0.6.8
    ```
 3. By default, xOpera works with user-name : **centos**. Make sure that opera's username alligns with the fog infrastructure user, you wish to work on (In this case study, it's **root** user).
    ```bash
