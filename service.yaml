@@ -141,6 +141,7 @@ topology_template:
     #     Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
     #     packages:
     #       - paho-mqtt
+    #       - RPi.GPIO
         
     #   requirements:
     #     - host: fog-node-1
@@ -156,7 +157,7 @@ topology_template:
     #     Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
     #     packages:
     #       - paho-mqtt
-        
+    #       - RPi.GPIO    
     #   requirements:
     #     - host: fog-node-2
     #     - dependency: k3s-deployment-1
@@ -172,6 +173,7 @@ topology_template:
         Broker_Server_URL: { concat: [{ get_input: node_1 }, ":30001"] }
         packages:
           - paho-mqtt
+          - RPi.GPIO
         
       requirements:
         - host: fog-node-3
