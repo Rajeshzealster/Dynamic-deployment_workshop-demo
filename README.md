@@ -54,6 +54,8 @@ NOTE: You can also add this to the bashrc file directly for persistence across t
    ```bash
    ssh-copy-id root@fog-node-1_IP
    ssh-copy-id root@fog-node-2_IP
+   ssh-copy-id root@fog-node-3_IP
+   ssh-copy-id root@fog-node-4_IP
    ```
 ## Clone the Repository
    ```bash
