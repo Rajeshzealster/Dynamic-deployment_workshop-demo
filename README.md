@@ -20,11 +20,11 @@ This repository contains the code for the IntelliClimate case study, showcasing 
 ## Setup xOpera on your workstation/PC
 1. Install xOpera from pip directly.
       ```bash
-      pip install opera
+      sudo pip install opera==0.6.8
       ```
    # (OR)
 
-2. Install xOpera inside python virtual environment.
+2. Install xOpera inside python virtual environment.( [xOpera-CLI](https://xlab-si.github.io/xopera-docs/02-cli.html))
 
    ```bash
    #Update package information and install required packages:
@@ -35,7 +35,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    mkdir ~/opera && cd ~/opera
    python3 -m venv .venv && . .venv/bin/activate
    pip install --upgrade pip
-   pip install opera
+   pip install opera==0.6.8
    ```
 3. By default, xOpera works with user-name : **centos**. Make sure that opera's username alligns with the fog infrastructure user, you wish to work on (In this case study, it's **root** user).
    ```bash
@@ -45,20 +45,48 @@ This repository contains the code for the IntelliClimate case study, showcasing 
    echo $OPERA_SSH_USER
    ```
 NOTE: You can also add this to the bashrc file directly for persistence across the sessions.
+
+## Clone the Repository
+   ```bash
+   git clone https://github.com/cloud-and-smart-labs/IntelliClimate_Case-Study_deployment.git
+   cd IntelliClimate_Case-Study_deployment
+   ```
+## Change the inputs.yaml file to have your allocated cluster set of IP addresses.
+   ```bash
+   #Refer this fro getting your cluster set.
+   **Cluster-set 1**
+   node_1: 192.168.0.204 # Kubernetes master/control plane
+   node_2: 192.168.0.233 #kubernetes slave-1
+   node_3: 192.168.0.75   #kubernetes slave-2 and actuator node(attached with servomortor)
+   node_4: 192.168.0.251 #Publisher node ( attached with DHT11 sensor)
+   
+   
+   **Cluster-set 2**
+   node_1: 192.168.0.23 # Kubernetes master/control plane
+   node_2: 192.168.0.106 #kubernetes slave-1
+   node_3: 192.168.0.205  #kubernetes slave-2 and actuator node(attached with servomortor)
+   node_4: 192.168.0.103 #Publisher node ( attached with DHT11 sensor)
+   
+   
+   **Cluster-set 3**
+   node_1: 192.168.0.97 # Kubernetes master/control plane
+   node_2: 192.168.0.30 #kubernetes slave-1
+   node_3: 192.168.0.18  #kubernetes slave-2 and actuator node(attached with servomortor)
+   node_4: 192.168.0.118 #Publisher node ( attached with DHT11 sensor)
+
+
+   ```
 ## Setup Passwordless SSH from workstation/PC to all fog nodes(inputs.yaml)
 1. Generate SSH key:
    ```bash
    ssh-keygen
    ```
-2. Copy SSH key to remote fog infrastructure (all nodes specified in inputs.yaml file):
+2. Copy SSH key to remote fog infrastructure i,e all nodes specified in inputs.yaml file:
    ```bash
    ssh-copy-id root@fog-node-1_IP
    ssh-copy-id root@fog-node-2_IP
-   ```
-## Clone the Repository
-   ```bash
-   git clone https://github.com/Rajeshzealster/Dynamic-deployment_workshop-demo.git
-   cd Dynamic-deployment_workshop-demo
+   ssh-copy-id root@fog-node-3_IP
+   ssh-copy-id root@fog-node-4_IP
    ```
 ## Deploy Services
 Use the xOpera CLI commands to deploy services onto fog infrastructure:
@@ -92,7 +120,7 @@ View kubernetes objects.
 # On node4
 Check the status of mqtt-publisher-service:
    ```bash
-   systemctl status mqtt-publisher-service
+   systemctl status mqtt-publisher
    ```
 # On node3
 Check the status of the actuator service:
@@ -108,9 +136,11 @@ Subscribe to sensor/data topic:
    ```bash
    mosquitto_sub -h node1_IP -p 30001 -t sensor/data
    ```
+Here, node1_IP corresponds to the IP of kubernetes master node.
+
 Now, you can observe the sensor-generated values on the mqtt-server’s sensor/data topic.
 
-We had setup the thresholds of 30 and 70 for temperature and humidity respectively. So, whenever the values goes beyond the threshold, you can see the actuator (here the servomotor) performing some work (rotates on to left for opening).
+We had setup the thresholds of 30 and 70 for temperature and humidity respectively. So, whenever the values goes beyond the threshold, you can see the actuator (here the servomotor) performing some work (rotates on to left for opening). Whenever, it feels temperature and humidity values are normal (below thresholds) for 30 secs, rotates towards right for closing.
 
 
 

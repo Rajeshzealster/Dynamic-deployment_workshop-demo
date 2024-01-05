@@ -54,6 +54,6 @@
     
 
     - name: Wait till the deployment is created
-      shell: "kubectl wait deployment -n '{{k3s_name_space}}' '{{depl_name}}' --for condition=Available=True --timeout=120s"
+      shell: "kubectl wait deployment -n '{{k3s_name_space}}' '{{depl_name}}' --for condition=Available=True --timeout=180s"
       #kubectl rollout status "deployment/{{depl_name }}.yaml"
       
