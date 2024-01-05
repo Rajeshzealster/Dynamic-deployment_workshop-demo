@@ -24,7 +24,7 @@ This repository contains the code for the IntelliClimate case study, showcasing 
       ```
    # (OR)
 
-2. Install xOpera inside python virtual environment.
+2. Install xOpera inside python virtual environment.( [xOpera-CLI](https://xlab-si.github.io/xopera-docs/02-cli.html))
 
    ```bash
    #Update package information and install required packages:
@@ -92,7 +92,7 @@ View kubernetes objects.
 # On node4
 Check the status of mqtt-publisher-service:
    ```bash
-   systemctl status mqtt-publisher-service
+   systemctl status mqtt-publisher
    ```
 # On node3
 Check the status of the actuator service:
@@ -112,7 +112,7 @@ Here, node1_IP corresponds to the IP of kubernetes master node.
 
 Now, you can observe the sensor-generated values on the mqtt-server’s sensor/data topic.
 
-We had setup the thresholds of 30 and 70 for temperature and humidity respectively. So, whenever the values goes beyond the threshold, you can see the actuator (here the servomotor) performing some work (rotates on to left for opening).
+We had setup the thresholds of 30 and 70 for temperature and humidity respectively. So, whenever the values goes beyond the threshold, you can see the actuator (here the servomotor) performing some work (rotates on to left for opening). Whenever, it feels temperature and humidity values are normal (below thresholds) for 30 secs, rotates towards right for closing.
 
 
 
